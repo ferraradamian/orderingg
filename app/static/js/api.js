@@ -54,23 +54,17 @@ const API = (function () {
         });
     }
 
-     /**
-     * Elimina un producto de una orden
-     *
-     */
-    function deleteProduct(orderId,productId) {
-     const data = JSON.stringify({ product: productId })
+    function deleteProduct(orderId, productId) {
         return fetch(`/order/${ orderId }/product/${ productId }`,
             {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
-                body: location.reload()
+                }
             }
         ).then(function toJson(r) {
-         return r.json();
+            return r.json();
         });
     }
 
