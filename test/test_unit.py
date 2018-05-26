@@ -60,6 +60,18 @@ class OrderingTestCase(TestCase):
         product = json.loads(resp.data)
         self.assertEqual(len(product), 1, "No obtuve el producto que cree")
 
+    def test_orderProduc_negativo(self):
+        p = Product(name="termo", price=210)
+        db.session.add(p)
+        db.session.commit()
+        order = Order(id=1)
+        orderProduct = OrderProduct(order_id=1, product_id=1, quantity=-1, product=p)
+        order.products.append(orderProduct)
+        db.session.add(order)
+        db.session.commit()
+        op = OrderProduct.query.all()
+        self.assertEqual(len(op), 0, "Se creo el producto")
+
 if __name__ == '__main__':
     unittest.main()
 
