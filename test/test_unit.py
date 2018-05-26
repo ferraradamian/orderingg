@@ -52,6 +52,14 @@ class OrderingTestCase(TestCase):
         # Verifica que en la lista de productos haya un solo producto
         self.assertEqual(len(p), 1, "No hay productos")
 
+    def test_get_product(self):
+        p = Product(name="termo", price=210)
+        db.session.add(p)
+        db.session.commit()
+        resp = self.client.get('/product')
+        product = json.loads(resp.data)
+        self.assertEqual(len(product), 1, "No obtuve el producto que cree")
+
 if __name__ == '__main__':
     unittest.main()
 
