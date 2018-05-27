@@ -36,13 +36,33 @@ class Ordering(unittest.TestCase):
 
         self.driver = webdriver.Chrome()
 
-    # def test_title(self):
-    #     driver = self.driver
-    #     driver.get(self.baseURL)
-    #     add_product_button = driver.find_element_by_xpath('/html/body/main/div[1]/div/button')
-    #     add_product_button.click()
-    #     modal = driver.find_element_by_id('modal')
-    #     assert modal.is_displayed(), "El modal no esta visible"
+#     def test_title(self):
+#         driver = self.driver
+#         driver.get(self.baseURL)
+#         add_product_button = driver.find_element_by_xpath('/html/body/main/div[1]/div/button')
+#         add_product_button.click()
+#         modal = driver.find_element_by_id('modal')
+#         assert modal.is_displayed(), "El modal no esta visible"
+
+
+    def test_cantidadNegativa(self):
+        driver = self.driver
+        driver.get(self.baseURL)
+        botonAgregar = driver.find_element_by_xpath('/html/body/main/div[1]/div/button')
+        botonAgregar.click()
+        cantidad = driver.find_element_by_id('quantity')
+        cantidad.send_keys("-1")
+        producto = driver.find_element_by_id('select-prod')
+        producto.click()
+        seleccionar = driver.find_element_by_xpath('//*[@id="select-prod"]/option[2]')
+        seleccionar.click()
+        time.sleep(1)
+        guardar = driver.find_element_by_id('save-button')
+        guardar.click()
+        time.sleep(1)
+        pro = Product.query.all()
+        self.assertEqual(len(pro), 0, "Permitio carga negativa")
+
 
     def test_nomb_produc(self):
         driver = self.driver
@@ -50,7 +70,7 @@ class Ordering(unittest.TestCase):
         #nom_produc = driver.find_element_by_xpath("//td[contains(text(),'Individual')]")
         nom_produc = driver.find_element_by_xpath("// html // tbody / tr[1] / td[2]")
         assert nom_produc.text != "", "El nombre del producto no existe"
-
+        
     def tearDown(self):
         db.session.remove()
         db.drop_all()

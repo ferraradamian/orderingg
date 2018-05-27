@@ -51,7 +51,18 @@ class OrderingTestCase(TestCase):
 
         # Verifica que en la lista de productos haya un solo producto
         self.assertEqual(len(p), 1, "No hay productos")
-
+        
+    def test_get_orderProduct(self):
+        producto = Product(id=22, name="Mantel", price=125)
+        orden = Order(id=33)
+        ordenProducto = OrderProduct(product_id=22, order_id=33, product=producto, quantity=8)
+        db.session.add(producto)
+        db.session.add(orden)
+        db.session.add(ordenProducto)
+        db.session.commit()
+        respuesta = self.client.get('/order/33/product/22')
+        self.assert200(respuesta, "No esta ese producto o esa orden")
+        
     def test_get_product(self):
         p = Product(name="termo", price=210)
         db.session.add(p)
