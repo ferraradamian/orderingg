@@ -63,6 +63,7 @@ class OrderingTestCase(TestCase):
         respuesta = self.client.get('/order/33/product/22')
         self.assert200(respuesta, "No esta ese producto o esa orden")
 
+    #Hacer un test de unidad para probar el funcionamiento del método GET en el endpoint /product.
     def test_get_product(self):
         p = Product(name="termo", price=210)
         db.session.add(p)
@@ -71,7 +72,9 @@ class OrderingTestCase(TestCase):
         product = json.loads(resp.data)
         self.assertEqual(len(product), 1, "No obtuve el producto que cree")
 
+    #Hacer un test de unidad para verificar que no se pueda crear una instancia de la clase OrderProduct si el atributo quantity es un entero negativo.
     def test_orderProduc_negativo(self):
+        op_antes = OrderProduct.query.all()
         p = Product(name="termo", price=210)
         db.session.add(p)
         db.session.commit()
@@ -80,8 +83,8 @@ class OrderingTestCase(TestCase):
         order.products.append(orderProduct)
         db.session.add(order)
         db.session.commit()
-        op = OrderProduct.query.all()
-        self.assertEqual(len(op), 0, "Se creo el producto")
+        op_despues = OrderProduct.query.all()
+        assert len(op_antes) == len(op_despues), "Se creo el producto"
 
     # test de metodo delete
     def test_delete(self):
@@ -102,7 +105,7 @@ class OrderingTestCase(TestCase):
             'price': 50
         }
         resp = self.client.post('/product', data=json.dumps(data), content_type='application/json')
-        assert resp != 200, 'Fallo el test, se creo un producto de nombre vacio'
+        assert resp == 200, 'Fallo el test, se creo un producto de nombre vacio'
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,7 +4,6 @@ import time
 import threading
 
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select
 
 from app import create_app, db
 from app.models import Product, Order, OrderProduct
@@ -63,6 +62,7 @@ class Ordering(unittest.TestCase):
         pro = Product.query.all()
         self.assertEqual(len(pro), 0, "Permitio carga negativa")
 
+
     # def test_delete(self):
     #     driver = self.driver
     #     driver.get(self.baseURL)
@@ -70,25 +70,31 @@ class Ordering(unittest.TestCase):
     #     delete_product_button.click()
     #     self.assertRaises(NoSuchElementException, driver.find_element_by_xpath, "xpath")
 
+    #Hacer un test de integración con Selenium para verificar que se haya solucionado el bug
+    # no mostraba el nombre del producto en la tabla, arreglado en la Actividad 2.
     def test_nomb_produc(self):
+        p = Product(name="Taza", price=210)
+        db.session.add(p)
+        db.session.commit()
+
+        order = Order(id=1)
+        orderProduct = OrderProduct(order_id=1, product_id=1, quantity=1, product=p)
+        order.products.append(orderProduct)
+        db.session.add(order)
+        db.session.commit()
+
         driver = self.driver
         driver.get(self.baseURL)
-        botonAgregar = driver.find_element_by_xpath('/html/body/main/div[1]/div/button')
-        botonAgregar.click()
-        select_producto = Select(driver.find_element_by_id('select-prod'))
-        select_producto.select_by_visible_text("Silla")
-        time.sleep(2)
-        guardar_button = driver.find_element_by_id('save-button')
-        guardar_button.click()
-        time.sleep(5)
-        nom_produc = driver.find_element_by_xpath("// html // tbody / tr[1] / td[2]")
-        assert nom_produc.text == "Silla", "El nombre del producto no existe"
 
+        nom_produc = driver.find_element_by_xpath("// html // tbody / tr[1] / td[2]")
+        time.sleep(6)
+        assert nom_produc.text == "Taza", "El nombre del producto no existe en la tabla"
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
         self.driver.close()
+
 
 if __name__ == "__main__":
     unittest.main()
