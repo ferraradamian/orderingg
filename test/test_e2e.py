@@ -45,6 +45,9 @@ class Ordering(unittest.TestCase):
     #     assert modal.is_displayed(), "El modal no esta visible"
 
     def test_cantidadNegativa(self):
+	produc = Product(name="Silla", price=120)
+	db.session.add(produc)
+	db.session.commit() 
         driver = self.driver
         driver.get(self.baseURL)
         botonAgregar = driver.find_element_by_xpath('/html/body/main/div[1]/div/button')
