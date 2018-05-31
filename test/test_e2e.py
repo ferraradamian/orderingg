@@ -62,14 +62,51 @@ class Ordering(unittest.TestCase):
         pro = Product.query.all()
         self.assertEqual(len(pro), 0, "Permitio carga negativa")
 
+    #Hacer un test de integración con Selenium para probar que se elimine la fila correspondiente al producto que se borra al utilizar el botón de borrado.
+		
+    def test_delete(self):
+	
+        #Creacion de  los productos
+        prod1 = Product(id= 1, name= 'Armario', price= 50)
+        db.session.add(prod1)
+        prod2 = Product(id= 2, name= 'Cajon', price= 30)
+        db.session.add(prod2)
+        prod3 = Product(id= 3, name= 'Silla', price= 10)
+        db.session.add(prod3)		
 
-    # def test_delete(self):
-    #     driver = self.driver
-    #     driver.get(self.baseURL)
-    #     delete_product_button = driver.find_element_by_xpath("//button[@class='button is-small is-danger']")
-    #     delete_product_button.click()
-    #     self.assertRaises(NoSuchElementException, driver.find_element_by_xpath, "xpath")
+        #Creo una orden
+        Orden = Order(id= 1)
+        db.session.add(Orden)
 
+        #Añado los productos a la orden
+        orderProduct = OrderProduct(order_id= 1, product_id= 1, quantity= 1, product= prod1)
+        db.session.add(orderProduct)
+        orderProduct = OrderProduct(order_id= 1, product_id= 2, quantity= 1, product= prod2)
+        db.session.add(orderProduct)
+        orderProduct = OrderProduct(order_id= 1, product_id= 3, quantity= 1, product= prod3)
+        db.session.add(orderProduct)		
+        db.session.commit()
+
+        driver = self.driver
+        driver.get(self.baseURL)
+
+        time.sleep(5)
+
+        delete_product_button = driver.find_element_by_xpath('//*[@id="orders"]/table/tbody/tr/td[6]/button[2]')
+        delete_product_button.click()
+        
+        time.sleep(5)
+
+        op = OrderProduct.query.all()
+
+        # Verifica que se haya borrado el producto de la lista de productos
+        self.assertEqual(len(op), 1, "No se pudo borrar el producto")
+
+
+        #Verifica que se haya borrado el producto correcto
+        self.assertNotEqual(op[0].product, prod, "No se borró el producto correcto")
+
+ 		 
     #Hacer un test de integración con Selenium para verificar que se haya solucionado el bug
     # no mostraba el nombre del producto en la tabla, arreglado en la Actividad 2.
     def test_nomb_produc(self):
