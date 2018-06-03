@@ -98,13 +98,13 @@ class OrderingTestCase(TestCase):
         db.session.add(orderProduct)
         db.session.commit()
         
-        resp = self.client.delete('order/2/product/1', content_type='aplication/json')
-        Resultado_delGET = self.client.get('/order/2', content_type='aplication/json')
+        resp = self.client.delete('order/2/product/1')           
         
-         data = json.loads(Resultado_delGET)          
+       self.assert200(resp, "Fallo el metodo delete")
         
-        self.assertEqual(resp.status, "200 OK", "Falló el DELETE")    
-        self.assertEqual(data['products'], [], "Falló el DELETE")          
+      self.assertNotIn(p.id,db.session.query(OrderProduct.product_id).filter_by(order_id=2),"")    
+    
+    ##No muestro mensaje porque se borro correctamente
 
     # test añadir productos sin nombre
     def test_name_vacio(self):
