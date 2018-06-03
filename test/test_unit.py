@@ -90,15 +90,21 @@ class OrderingTestCase(TestCase):
 
     # test de metodo delete
     def test_delete(self):
-        o = Order(id=1)
+        o = Order(id=2)
         db.session.add(o)
         p = Product(id=1, name='Tenedor', price=50)
         db.session.add(p)
-        orderProduct = OrderProduct(order_id=1, product_id=1, quantity=1, product=p)
+        orderProduct = OrderProduct(order_id=2, product_id=1, quantity=1, product=p)
         db.session.add(orderProduct)
         db.session.commit()
-        resp = self.client.delete('order/1/product/1')
-        self.assert200(resp, "Fallo el metodo delete")
+        
+        resp = self.client.delete('order/2/product/1', content_type='aplication/json')
+        Resultado_delGET = self.client.get('/order/2', content_type='aplication/json')
+        
+         data = json.loads(Resultado_delGET)          
+        
+        self.assertEqual(resp.status, "200 OK", "Falló el DELETE")    
+        self.assertEqual(data['products'], [], "Falló el DELETE")          
 
     # test añadir productos sin nombre
     def test_name_vacio(self):
