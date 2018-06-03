@@ -45,20 +45,24 @@ class Ordering(unittest.TestCase):
     #     assert modal.is_displayed(), "El modal no esta visible"
 
     def test_cantidadNegativa(self):
-	produc = Product(name="Silla", price=120)
-	db.session.add(produc)
-	db.session.commit() 
+        produc = Product(name="Sillita", price=120)
+        db.session.add(produc)
+        Orden = Order(id= 1)
+        db.session.add(Orden)
+        db.session.commit() 
         driver = self.driver
         driver.get(self.baseURL)
         botonAgregar = driver.find_element_by_xpath('/html/body/main/div[1]/div/button')
         botonAgregar.click()
-        cantidad = driver.find_element_by_id('quantity')
-        cantidad.send_keys("-1")
         producto = driver.find_element_by_id('select-prod')
         producto.click()
+        time.sleep(1)
         seleccionar = driver.find_element_by_xpath('//*[@id="select-prod"]/option[2]')
         seleccionar.click()
-        time.sleep(1)
+        time.sleep(2)
+        cantidad = driver.find_element_by_id('quantity')
+        cantidad.send_keys("-1")
+        time.sleep(2)
         guardar = driver.find_element_by_id('save-button')
         guardar.click()
         time.sleep(1)
@@ -93,21 +97,22 @@ class Ordering(unittest.TestCase):
         driver = self.driver
         driver.get(self.baseURL)
 
-        time.sleep(5)
+        time.sleep(2)
 
-        delete_product_button = driver.find_element_by_xpath('//*[@id="orders"]/table/tbody/tr/td[6]/button[2]')
+        delete_product_button = driver.find_element_by_xpath('//*[@id="orders"]/table/tbody/tr[3]/td[6]/button[2]')
         delete_product_button.click()
         
-        time.sleep(5)
+        time.sleep(2)
 
         op = OrderProduct.query.all()
 
         # Verifica que se haya borrado el producto de la lista de productos
-        self.assertEqual(len(op), 1, "No se pudo borrar el producto")
+        self.assertEqual(len(op), 2, "No se pudo borrar el producto")
 
 
         #Verifica que se haya borrado el producto correcto
-        self.assertNotEqual(op[0].product, prod, "No se borró el producto correcto")
+        self.assertEqual(op[0].product, prod1, "No se borró el producto correcto")
+        self.assertEqual(op[1].product, prod2, "No se borró el producto correcto")
 
  		 
     #Hacer un test de integración con Selenium para verificar que se haya solucionado el bug
