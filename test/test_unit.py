@@ -70,11 +70,11 @@ class OrderingTestCase(TestCase):
         db.session.commit()
         resp = self.client.get('/product')
         product = json.loads(resp.data)
-        self.assertEqual(len(product), 1, "No obtuve el producto que cree")
+
 
     #Hacer un test de unidad para verificar que no se pueda crear una instancia de la clase OrderProduct si el atributo quantity es un entero negativo.
     def test_orderProduc_negativo(self):
-        op_antes = OrderProduct.query.all()
+        #op_antes = OrderProduct.query.all()
         p = Product(name="termo", price=210)
         db.session.add(p)
         db.session.commit()
@@ -83,8 +83,10 @@ class OrderingTestCase(TestCase):
         order.products.append(orderProduct)
         db.session.add(order)
         db.session.commit()
-        op_despues = OrderProduct.query.all()
-        assert len(op_antes) == len(op_despues), "Se creo el producto"
+        resp = self.client.get('/order/1/product/1')#obtengo la tupla del producto de la orden id=1 y el producto id=1
+        data = json.loads(resp.data)
+        self.assertNotEqual(data['id'], 1, "Fallo, Obtuve el producto en la orden con cant negativa")
+        #si el id del producto es igual al ingresado en la orden creada, se ingreso el produto con cant negativa
 
     # test de metodo delete
     def test_delete(self):
@@ -100,12 +102,11 @@ class OrderingTestCase(TestCase):
 
     # test añadir productos sin nombre
     def test_name_vacio(self):
-        data = {
-            'name': '',
-            'price': 50
-        }
-        resp = self.client.post('/product', data=json.dumps(data), content_type='application/json')
-        assert resp == 200, 'Fallo el test, se creo un producto de nombre vacio'
+        producto = Product(id=1, name='', price=2)
+        db.session.add(producto)
+        db.session.commit()
+        p = Product.query.get(1)
+        assert p.name != '', 'Fallo el test, se creo un producto de nombre vacio'
 
 if __name__ == '__main__':
     unittest.main()
