@@ -107,7 +107,7 @@ class OrderingTestCase(TestCase):
         self.assert200(resp, "Fallo el metodo delete")
         resp = self.client.get('order/1')
         orden1 = json.loads(resp.data)
-        self.assertEqual(len(orden1['products']), 0, "Hay productos") 
+        self.assertEqual(len(orden1['products']), 0, "Hay productos")
     
     ##No muestro mensaje porque se borro correctamente
 
