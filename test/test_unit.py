@@ -61,15 +61,18 @@ class OrderingTestCase(TestCase):
         db.session.add(ordenProducto)
         db.session.commit()
         respuesta = self.client.get('/order/33/product/22')
+        producto1 = json.loads(respuesta.data)
+        self.assertEqual(producto1['id'], producto.id, "No se borró el producto correcto")
         self.assert200(respuesta, "No esta ese producto o esa orden")
 
     #Hacer un test de unidad para probar el funcionamiento del método GET en el endpoint /product.
     def test_get_product(self):
-        p = Product(name="termo", price=210)
+        p = Product(id=11, name="termo", price=210)
         db.session.add(p)
         db.session.commit()
         resp = self.client.get('/product')
-        product = json.loads(resp.data)
+        product2 = json.loads(resp.data)
+        self.assertEqual(product2[0]['id'], 11, "No se borró el producto correcto")
 
 
     #Hacer un test de unidad para verificar que no se pueda crear una instancia de la clase OrderProduct si el atributo quantity es un entero negativo.
@@ -90,16 +93,21 @@ class OrderingTestCase(TestCase):
 
     # test de metodo delete
     def test_delete(self):
-         o = Order(id=1)
-         db.session.add(o)
-         p = Product(id=1, name='Tenedor', price=50)
-         db.session.add(p)
-         orderProduct = OrderProduct(order_id=1, product_id=1, quantity=1, product=p)
-         db.session.add(orderProduct)
-         db.session.commit()
-         resp = self.client.delete('order/1/product/1')
-         self.assert200(resp, "Fallo el metodo delete")        
-         self.assertNotIn(p.id,db.session.query(OrderProduct.product_id).filter_by(order_id=1),"")    
+        o = Order(id=1)
+        db.session.add(o)
+        p = Product(id=1, name='Tenedor', price=50)
+        db.session.add(p)
+        orderProduct = OrderProduct(order_id=1, product_id=1, quantity=1, product=p)
+        db.session.add(orderProduct)
+        db.session.commit()
+        respuesta = self.client.get('order/1')
+        orden1 = json.loads(respuesta.data)
+        self.assertEqual(len(orden1['products']), 1, "No hay un producto")
+        resp = self.client.delete('order/1/product/1')
+        self.assert200(resp, "Fallo el metodo delete")
+        resp = self.client.get('order/1')
+        orden1 = json.loads(resp.data)
+        self.assertEqual(len(orden1['products']), 0, "Hay productos") 
     
     ##No muestro mensaje porque se borro correctamente
 
