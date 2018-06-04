@@ -61,7 +61,10 @@ class OrderingTestCase(TestCase):
         db.session.add(ordenProducto)
         db.session.commit()
         respuesta = self.client.get('/order/33/product/22')
-        self.assert200(respuesta, "No esta ese producto o esa orden")
+        self.assert200(respuesta, "No esta ese producto o esa orden")        
+        data = json.loads(respuesta.data)
+        self.assertNotEqual(data['id'], 22, "Fallo, No esta ese producto o esa orden")        
+       
 
     #Hacer un test de unidad para probar el funcionamiento del método GET en el endpoint /product.
     def test_get_product(self):
@@ -98,7 +101,10 @@ class OrderingTestCase(TestCase):
          db.session.add(orderProduct)
          db.session.commit()
          resp = self.client.delete('order/1/product/1')
-         self.assert200(resp, "Fallo el metodo delete")        
+         self.assert200(resp, "Fallo el metodo delete")       
+         resp2 = self.client.get('order/1')
+         data = json.loads(resp2.data)
+         assert len(data) > 0, "No Se Borro el Producto"            
          self.assertNotIn(p.id,db.session.query(OrderProduct.product_id).filter_by(order_id=1),"")    
     
     ##No muestro mensaje porque se borro correctamente
