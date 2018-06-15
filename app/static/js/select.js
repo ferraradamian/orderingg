@@ -1,5 +1,6 @@
 const Select = (function () {
-    const source = document.getElementById('select-template').innerHTML;
+    //2:44  error    Strings must use doublequote. Damian6
+    const source = document.getElementById("select-template").innerHTML;
     const template = Handlebars.compile(source);
 
     /*

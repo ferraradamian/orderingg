@@ -8,11 +8,12 @@ const Modal = (function () {
             this.$el = context.querySelector(config.el);
 
             // Nos ponemos a escuchar cambios en el input de cantidad
-            this.$el.addEventListener('input', () => {
+            //11:39  error    Strings must use doublequote. Damian7
+            this.$el.addEventListener("input", () => {
                 if (this.validate()) {
                     config.onChangeQunatity(this.$el.value);
                 }
-
+                //17:35  error    Missing semicolon. Damian8
                 this.toggleError()
             });
 
@@ -43,7 +44,8 @@ const Modal = (function () {
          **/
         toggleError: function () {
             const $errorQuantity = this.$el.parentElement
-                .querySelector('.help');
+                //47:32  error    Strings must use doublequote. Damian9
+                .querySelector(".help");
 
             this.$el.classList.toggle('is-danger', !this.isValid);
             $errorQuantity.classList.toggle('is-hidden', this.isValid);
@@ -157,6 +159,7 @@ const Modal = (function () {
      * Cierra el modal
      **/
     function close() {
+        //161:38  error    Strings must use doublequote. Damian10
         this.$modal.classList.remove('is-active');
     }
 
