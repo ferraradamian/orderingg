@@ -105,7 +105,9 @@ def order_product_detail(pk_order, pk_product):
     Si no se encuentra el producto, se responde con un 404
     """
 
-    order_product = OrderProduct.query.filter(and_(OrderProduct.order_id==pk_order, OrderProduct.product_id==pk_product)).all()[0]
+    order_product = OrderProduct.query.filter(and_(OrderProduct.order_id
+                                                   == pk_order, OrderProduct.product_id
+                                                   == pk_product)).all()[0]
 
     if (not order_product):
         return jsonify({ 'error': 'not-found' }), 404
