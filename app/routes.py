@@ -65,7 +65,7 @@ def order(pk):
     return jsonify(order.serialize)
 
 @rest.route("/order/<pk>/product", methods=['POST'])
-def addProductToOrder(pk):
+def addproducttoorder(pk):
     # obtenemos las ordenes
     order = Order.query.get(pk)
 
