@@ -79,7 +79,7 @@ const API = (function () {
      * Agrega un producto a una orden
      **/
     function addProduct(orderId, product, quantity) {
-	   // 83:77 error Missing semicolon. Pablo6
+        // 83:77 error Missing semicolon. Pablo6
         const data = JSON.stringify({ quantity: quantity, product: product });
 
         return fetch(`/order/${ orderId }/product`,
