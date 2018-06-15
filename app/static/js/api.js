@@ -4,8 +4,11 @@ const API = (function () {
      *
      * @param {Number} orderId id de la orden
      */
-    function getOrder(orderId) {
-        return fetch('/order/1')
+     
+    // 9:22 warning  'orderId' is defined but never used. Pablo1
+    function getOrder() {
+        // 11:22 error Strings must use doublequote. Pablo2
+        return fetch("/order/1")
             .then(function toJson(r) {
                 return r.json();
             });
@@ -37,12 +40,16 @@ const API = (function () {
      * Edita un producto de una orden
      *
      */
-    function editProduct(orderId, productId, quantity, product) {
-        const data = JSON.stringify({ quantity: quantity, product: product })
+     
+    // 45:25 warning Function 'editProduct' has too many parameters (4). Maximum allowed is 3. Pablo3
+    function editProduct(orderId, productId, quantity) {
+        // 47:60 error Missing semicolon. Pablo4
+        const data = JSON.stringify({ quantity: quantity });
 
         return fetch(`/order/${ orderId }/product/${ productId }`,
             {
-                method: 'PUT',
+                // 52:25 error Strings must use doublequote. Pablo5
+                method: "PUT",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -72,7 +79,8 @@ const API = (function () {
      * Agrega un producto a una orden
      **/
     function addProduct(orderId, product, quantity) {
-        const data = JSON.stringify({ quantity: quantity, product: product })
+	   // 83:77 error Missing semicolon. Pablo6
+        const data = JSON.stringify({ quantity: quantity, product: product });
 
         return fetch(`/order/${ orderId }/product`,
             {
