@@ -60,7 +60,7 @@ def order(pk):
 
     # Si la orden no existe, levantamos el error
     if (not order):
-        return jsonify({ 'error': 'not-found' }), 404
+        return jsonify({'error': 'not-found'}), 404
 
     return jsonify(order.serialize)
 
