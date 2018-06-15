@@ -43,7 +43,8 @@
 
     function onEditProduct() {
         API.editProduct(1, state.selectedProduct.id, state.quantity)
-            .then(function (r) {
+            // 47:28 warning  'r' is defined but never used. Pablo7
+            .then(function () {
                 API.getOrder().then(function (data) {
                     refs.table.update(data);
                 });

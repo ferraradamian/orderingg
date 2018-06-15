@@ -106,10 +106,12 @@ const Modal = (function () {
             $edit,
             $save,
             $editTitle: $modal.querySelector('#edit-title'),
-            $saveTitle: $modal.querySelector('#save-title'),
+            // 110:60  error Unexpected trailing comma. Pablo8
+            $saveTitle: $modal.querySelector('#save-title')
         };
 
-        modal.close = close.bind(modal),
+        // 114:40 error Unexpected use of comma operator. Pablo9
+        modal.close = close.bind(modal);
         modal.open = open.bind(modal)
         modal.openEdit = openEdit.bind(modal)
 
