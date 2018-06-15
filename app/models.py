@@ -42,9 +42,8 @@ class Order(db.Model):
 
     @hybrid_property
     def orderPrice(self):
-        """
-        Computa el precio total de la orden
-        """
+        """Computa el precio total de la orden"""
+        # Solucionado D200 One-line docstring should fit on one line with quotes. Pablo.
         return sum([
             product.price * product.quantity for product in self.products
         ])
