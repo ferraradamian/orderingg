@@ -17,6 +17,7 @@ def hello():
     """
     return render_template('orders.html')
 
+
 @rest.route("/product", methods=['GET', 'POST'])
 def products():
     """
