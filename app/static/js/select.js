@@ -53,7 +53,8 @@ const Select = (function () {
         const id = parseInt($option.value);
 
         return this.data.filter(function (product) {
-            return product.id == id;
+            //56:31  error    Expected '===' and instead saw '=='. Damian4
+            return product.id === id;
         })[0];
     }
 
@@ -77,7 +78,8 @@ const Select = (function () {
         this.$select.dispatchEvent(e);
     }
 
-    function onChange(e) {
+    //81:23  warning  'e' is defined but never used. Damian5
+    function onChange() {
         const product = this.getSelected();
 
         this.isValid = product;
