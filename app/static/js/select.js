@@ -47,7 +47,8 @@ const Select = (function () {
     }
 
     function getSelected() {
-        selectedIdx = this.$select.selectedIndex;
+        // 51:8 error 'selectedIdx' is not defined. Pablo10
+        const selectedIdx = this.$select.selectedIndex;
         const $option = this.$select.options[selectedIdx];
         const id = parseInt($option.value);
 
