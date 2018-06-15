@@ -21,7 +21,8 @@ def hello():
 @rest.route("/product", methods=['GET', 'POST'])
 def products():
     """
-    Endpoint para obtener todos los productos o crear uno nuevo
+    Endpoint para obtener todos los productos o crear uno nuevo.
+
     :return:
     """
     if request.method == 'POST':
