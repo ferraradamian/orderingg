@@ -7,6 +7,7 @@ from flask import request, jsonify, render_template
 from flask import Blueprint
 rest = Blueprint('rest', __name__, template_folder='templates')
 
+
 @rest.route("/")
 def hello():
     return render_template('orders.html')
