@@ -10,6 +10,10 @@ rest = Blueprint('rest', __name__, template_folder='templates')
 
 @rest.route("/")
 def hello():
+    """
+    Endpoint para obtener pagina inicio
+    :return:
+    """
     return render_template('orders.html')
 
 @rest.route("/product", methods=['GET', 'POST'])
