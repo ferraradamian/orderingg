@@ -1,6 +1,11 @@
+"""Solucion a test_unit.py:1:1: D100 Missing docstring in public module."""
+# Solucion a test_unit.py:1:1: D400
+# First line should end with a period,con punto
 import os
 import unittest
+import datetime
 
+# F401 'datetime' imported but unused
 from flask import json
 from flask_testing import TestCase
 
@@ -9,7 +14,10 @@ from app.models import Product, Order, OrderProduct
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+
 class OrderingTestCase(TestCase):
+  """Solucion a test_unit.py:15:1: D101 Missing docstring in public class."""
+# Solucion a test_unit.py:12:1: E302 expected 2 blank lines, found 1
     def create_app(self):
         config_name = 'testing'
         app = create_app()
@@ -20,7 +28,7 @@ class OrderingTestCase(TestCase):
         )
         return app
 
-    # Creamos la base de datos de test
+# Creamos la base de datos de test
     def setUp(self):
         db.session.commit()
         db.drop_all()
@@ -42,6 +50,7 @@ class OrderingTestCase(TestCase):
             'name': 'Tenedor',
             'price': 50
         }
+# solucion a test_unit.py:47:1: W293 blank line contains whitespace
 
         resp = self.client.post('/product', data=json.dumps(data), content_type='application/json')
 
@@ -65,7 +74,8 @@ class OrderingTestCase(TestCase):
         self.assertEqual(producto1['id'], producto.id, "No se borró el producto correcto")
         self.assert200(respuesta, "No esta ese producto o esa orden")
 
-    #Hacer un test de unidad para probar el funcionamiento del método GET en el endpoint /product.
+# Solucion a  test_unit.py:70:5: E265 block comment should start with '# '
+# Hacer un test de unidad para probar el funcionamiento del método GET en el endpoint /product.
     def test_get_product(self):
         p = Product(id=11, name="termo", price=210)
         db.session.add(p)
@@ -74,10 +84,14 @@ class OrderingTestCase(TestCase):
         product2 = json.loads(resp.data)
         self.assertEqual(product2[0]['id'], 11, "No se borró el producto correcto")
 
-
-    #Hacer un test de unidad para verificar que no se pueda crear una instancia de la clase OrderProduct si el atributo quantity es un entero negativo.
+# Solucion a test_unit.py:80:80: E501 line too long (151 > 79 characters)
+# Hacer un test de unidad para verificar que no se pueda crear una
+# instancia de la clase OrderProduct si el
+# atributo quantity es un entero negativo
     def test_orderProduc_negativo(self):
-        #op_antes = OrderProduct.query.all()
+# test_unit.py:84:9: E265 block comment should start with '# '
+# solucion a test_unit.py:86:63: W291 trailing whitespace
+# op_antes = OrderProduct.query.all()
         p = Product(name="termo", price=210)
         db.session.add(p)
         db.session.commit()
@@ -86,10 +100,12 @@ class OrderingTestCase(TestCase):
         order.products.append(orderProduct)
         db.session.add(order)
         db.session.commit()
-        resp = self.client.get('/order/1/product/1')#obtengo la tupla del producto de la orden id=1 y el producto id=1
+        resp = self.client.get('/order/1/product/1')
+# obtengo la tupla del producto de la orden id=1 y el producto id=1
         data = json.loads(resp.data)
         self.assertNotEqual(data['id'], 1, "Fallo, Obtuve el producto en la orden con cant negativa")
-        #si el id del producto es igual al ingresado en la orden creada, se ingreso el produto con cant negativa
+# test_unit.py:96:9: E265 block comment should start with '# '
+# si el id del producto es igual al ingresado en la orden creada, se ingreso el produto con cant negativa
 
     # test de metodo delete
     def test_delete(self):
@@ -108,8 +124,10 @@ class OrderingTestCase(TestCase):
         resp = self.client.get('order/1')
         orden1 = json.loads(resp.data)
         self.assertEqual(len(orden1['products']), 0, "Hay productos")
-    
-    ##No muestro mensaje porque se borro correctamente
+
+# aolucion a test_unit.py:118:1: W293 blank line contains whitespace
+# test_unit.py:119:5: E265 block comment should start with '# '
+# No muestro mensaje porque se borro correctamente
 
     # test añadir productos sin nombre
     def test_name_vacio(self):
@@ -119,5 +137,8 @@ class OrderingTestCase(TestCase):
         p = Product.query.get(1)
         assert p.name != '', 'Fallo el test, se creo un producto de nombre vacio'
 
+
+# solucion a test_unit.py:132:1: E305 expected 2
+# blank lines after class or function definition, found 1
 if __name__ == '__main__':
     unittest.main()
